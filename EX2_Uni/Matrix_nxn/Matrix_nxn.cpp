@@ -232,21 +232,17 @@ squaredMatrix squaredMatrix::operator^(uint power){
         
     }
     
-    squaredMatrix res(n);
-    squaredMatrix temp1(n);
+    squaredMatrix res = *this;
+    
 
-    for (size_t i = 0; i < power; i++)
+    for (size_t i = 1; i < power; i++)
     {
-        squaredMatrix temp2(n);
-        temp2 = *this;
 
-        temp1 = temp2 *temp2;
-        
-
+        res = res * (*this);
 
     }
     
-    res = temp1;
+ 
     return res;
 }
 
@@ -312,53 +308,348 @@ squaredMatrix squaredMatrix::operator--(int){
     return newMat;
 }
 
-double squaredMatrix::operator~(){
-    double determinant = 0;
+double squaredMatrix::operator!(){
+
+    if (n == 1)
+        return matrix[0][0];
+    
+    
     if (n == 2)
-    {
         return matrix[0][0] * matrix[1][1] -matrix[1][0] * matrix[0][1];
-    }
+    
 
-    size_t i = 0
+    size_t i = 0;
+    double determinant = 0;
 
-    for (size_t j = 0; j < n - 1; j++)
+    for (size_t j = 0; j < n ; j++)
     {
-        squaredMatrix minor = subMatrix(j,i,n);
-        double detMinor = ~minor;
-        determinant = 
+        squaredMatrix minor = subMatrix(j,i,*this);
+        double detMinor = !minor;
+        determinant += matrix[i][j]*power(-1, i + j) * detMinor;
 
     }
     
+
+    return determinant;
     
 }
 
-squaredMatrix squaredMatrix::submatrix(size_t j,size_t i,size_t numElement){
+squaredMatrix squaredMatrix::subMatrix(size_t j,size_t i,squaredMatrix mat){
+        size_t size = mat.n ;
+        squaredMatrix minor(size - 1);
 
-        if(numElement == 0){
-            return squaredMatrix ret(0);
-        }
-
-        squaredMatrix minor(numElement);
-
-
-        size_t row = 0;
-        size_t col = 0;
-
-
-        while( row < numElement && col < numElement){
-            if (row == i || col == j)
+        size_t minorRow = 0;
+        for (size_t row = 0; row < size ; row++)
+        {
+            if (row == i) continue;
+            size_t minorCol = 0;
+            
+            for (size_t col = 0; col < size; col++)
             {
-                continue;
+                if(col == j) continue;
+
+                minor.matrix[minorRow][minorCol] = mat.matrix[row][col];
+                minorCol++;
             }
 
-            minor.matrix[row][col] = matrix[i][j];
+            minorRow++;
+            
             
         }
 
 
+        return minor;    
+        }
 
-        return submatrix(j,i,numElement - 1);
 
+// Non-const version
+double* squaredMatrix::operator[](size_t index) {
+    if (index >= n) throw "Index out of bounds";
+    return matrix[index];
+}
+
+// Const version
+const double* squaredMatrix::operator[](size_t index) const {
+    if (index >= n) throw "Index out of bounds";
+    return matrix[index];
+}
+
+bool squaredMatrix::operator==(squaredMatrix &other)const{
+    
+    double sum1 = 0;
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum1 += matrix[i][j];
+        }
+        
+    }
+
+    double sum2 = 0;
+
+    for (size_t i= 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum2 += other.matrix[i][j];
+        }
+        
+    }
+
+
+    return sum1 == sum2;
+
+    
+}
+
+bool squaredMatrix::operator!=(squaredMatrix &other)const{
+
+    double sum1 = 0;
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum1 += matrix[i][j];
+        }
+        
+    }
+
+    double sum2 = 0;
+
+    for (size_t i= 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum2 += other.matrix[i][j];
+        }
+        
+    }
+
+
+    return sum1 != sum2;
+
+}
+
+
+bool squaredMatrix::operator<(squaredMatrix &other)const{
+
+    double sum1 = 0;
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum1 += matrix[i][j];
+        }
+        
+    }
+
+    double sum2 = 0;
+
+    for (size_t i= 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum2 += other.matrix[i][j];
+        }
+        
+    }
+
+
+    return sum1 < sum2;
+}
+
+
+
+bool squaredMatrix::operator>(squaredMatrix &other)const{
+
+    double sum1 = 0;
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum1 += this->matrix[i][j];
+        }
+        
+    }
+
+    double sum2 = 0;
+
+    for (size_t i= 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum2 += other.matrix[i][j];
+        }
+        
+    }
+
+    return sum1 > sum2;
+}
+bool squaredMatrix::operator <=(const squaredMatrix &other)const{
+    double sum1 = 0;
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum1 += matrix[i][j];
+        }
+        
+    }
+
+    double sum2 = 0;
+
+    for (size_t i= 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum2 += other.matrix[i][j];
+        }
+        
+    }
+
+
+    return sum1 <= sum2;
+}
+
+bool squaredMatrix::operator >=(const squaredMatrix &other)const{
+    double sum1 = 0;
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum1 += matrix[i][j];
+        }
+        
+    }
+
+    double sum2 = 0;
+
+    for (size_t i= 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            sum2 += other.matrix[i][j];
+        }
+        
+    }
+
+
+    return sum1 >= sum2;
+}
+
+
+
+squaredMatrix &squaredMatrix::operator~(){
+
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = i + 1; j < n; j++)
+        {
+           double temp = matrix[i][j];
+           matrix[i][j] = matrix[j][i];
+           matrix[j][i] = temp;
+             
+        }
+        
+    }
+
+    return *this;
+}
+
+
+squaredMatrix &squaredMatrix::operator +=(const squaredMatrix &other){
+        if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
+
+
+        for (size_t i = 0; i < n; i++)
+        {
+            for (size_t j = 0; j < n; j++)
+            {
+                matrix[i][j] += other.matrix[i][j];
+            }
+            
+        }
+        
+return *this;
+}
+
+squaredMatrix &squaredMatrix::operator -=(const squaredMatrix &other){
+    if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
+
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            matrix[i][j] -= other.matrix[i][j];
+        }
+        
+    }
+    
+return *this;
+}
+
+squaredMatrix &squaredMatrix::operator *=(const squaredMatrix &other){
+    if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
+
+
+  *this = (*this) * other;
+  
+
+  return *this;
+
+}
+
+
+
+squaredMatrix &squaredMatrix::invertHelper(squaredMatrix &other){
+
+    if (!other == 0) throw "Error: Matrix is not invertable\n";
+
+    squaredMatrix cofactor(n);
+    
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            squaredMatrix minor(n);
+            minor = subMatrix(j,i,other);
+            cofactor.matrix[i][j] = (power(-1 , i + j) * !minor);
+
+        }
+        
+    }
+
+
+
+
+     
+
+     *this = (~cofactor) * (1.0 / !other);
+     
+
+
+
+    
+
+    
+    return *this;
+}
+
+squaredMatrix &squaredMatrix::operator/=(squaredMatrix &other){
+    if (!(other) == 0) throw "Error: Matrix isn't invertable\n";
+
+    invertHelper(other);//inverting other
+
+
+    *this = (*this) * other;
+
+
+    return *this;
 
 
 
@@ -366,10 +657,48 @@ squaredMatrix squaredMatrix::submatrix(size_t j,size_t i,size_t numElement){
 
 
 
+squaredMatrix &squaredMatrix::operator %=(const squaredMatrix &other){
+    if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
+
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            matrix[i][j] *= other.matrix[i][j];
+        }
+        
+    }
+    
+return *this;
+
+}
+
+
+squaredMatrix &squaredMatrix::operator %=(size_t natural){
+    if(natural <= 0) throw "Modulu operation does not support the number you have provided\n";
+
+
+    for (size_t i = 0; i < n; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            if ((int)matrix[i][j] == matrix[i][j])
+            matrix[i][j] = (int)matrix[i][j] % natural;
+        }
+        
+    }
+    
+return *this;
+}
+
+
+
+
+
+
+
+
 
     
-
-
-
-
 

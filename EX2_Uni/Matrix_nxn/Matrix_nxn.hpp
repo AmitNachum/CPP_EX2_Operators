@@ -6,14 +6,28 @@
 
 namespace Squared_Matrix{
 
-  
     class squaredMatrix{
 
         private:
         double **matrix;
         size_t n;
 
-        squaredMatrix submatrix(size_t j, size_t i,size_t numElement);
+        squaredMatrix subMatrix(size_t j, size_t i,squaredMatrix mat);
+        squaredMatrix &invertHelper(squaredMatrix &other);
+
+        double power(double number, size_t power){
+            double res = 0;
+            size_t i = 0;
+            while (i < power)
+            {
+                res += number *number;
+                i++;
+            }
+
+            return res;
+            
+            
+        }
 
 
         public:
@@ -74,28 +88,52 @@ namespace Squared_Matrix{
         squaredMatrix &operator--();
         squaredMatrix operator++(int);
         squaredMatrix operator--(int);
-        double operator~();
-        //squaredMatrix operator[](int index)const;
-        // bool operator==(squaredMatrix &other)const;
-        // bool operator!=(squaredMatrix &other)const;
-        // bool operator <(squaredMatrix &other)const;
-        // bool operator >(squaredMatrix &other)const;
-        // bool operator <=(const squaredMatrix &other)const;
-        // bool operator >=(const squaredMatrix &other)const;
-        // squaredMatrix operator !();
-        // squaredMatrix operator +=(const squaredMatrix &other);
-        // squaredMatrix operator -=(const squaredMatrix &other);
-        // squaredMatrix operator *=(const squaredMatrix &other);
-        //  squaredMatrix operator /=(const squaredMatrix &other);
-        // squaredMatrix operator %=(const squaredMatrix &other);
-        // friend std::ostream& operator<<(std::ostream &os, const squaredMatrix &other);
+        double operator!();
+        double* operator[](size_t index);                    // for non-const access
+        const double* operator[](size_t index) const;        // for const access    
+         bool operator ==(squaredMatrix &other)const;
+         bool operator!=(squaredMatrix &other)const;
+         bool operator <(squaredMatrix &other)const;
+         bool operator >(squaredMatrix &other)const;
+         bool operator <=(const squaredMatrix &other)const;
+         bool operator >=(const squaredMatrix &other)const;
+         squaredMatrix &operator ~();
+         squaredMatrix &operator +=(const squaredMatrix &other);
+         squaredMatrix &operator -=(const squaredMatrix &other);
+         squaredMatrix &operator *=(const squaredMatrix &other);
+         squaredMatrix &operator /=(squaredMatrix &other);
+         squaredMatrix &operator %=(const squaredMatrix &other);
+         squaredMatrix &operator %=(size_t natural);
 
 
-
+         friend std::ostream& operator<<(std::ostream &os, squaredMatrix &other){
+            size_t size = other.n;
+        
+        
+            for (size_t i = 0; i < size; i++)
+            {
+               for (size_t j = 0; j < size; j++)
+               {
+        
+                if (j != size - 1) 
+                os << other.matrix[i][j] << ", ";
+        
+                else 
+                os << other.matrix[i][j];
+        
+               }
+               os << "\n";
+               
+            }
+        
+            return os;
+        }
 
 
 
     };
+    
+    
 
 
 
