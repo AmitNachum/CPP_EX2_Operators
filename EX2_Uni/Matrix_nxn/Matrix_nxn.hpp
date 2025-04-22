@@ -80,7 +80,7 @@ namespace Squared_Matrix{
         squaredMatrix operator+(const squaredMatrix &other)const;
         squaredMatrix operator*(const squaredMatrix &other)const;
         squaredMatrix operator*(double scalar);
-        squaredMatrix operator%(squaredMatrix &other);
+        squaredMatrix operator%(const squaredMatrix &other);
         squaredMatrix operator%(uint modulu);
         squaredMatrix operator/(double scalar);
         squaredMatrix operator^(uint power);

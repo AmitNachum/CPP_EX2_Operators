@@ -132,20 +132,6 @@ You already used both in your Matrix Tests file. If you want to change other hea
 
 Let me know if you’d like other styles too (like underline, red, or even background colors).
 
--Finally the ReadMe File was built by ChatGPT by my guidence and explination on what to include and what not to include.
-
-Due to the fact that the chat's prompt is the readMe it will be redundant to include it here.
-
-Prompt:
-Me:
-Please provide a readMe file that is based on the following folder of this project.
-
-Please analyze the folder attached, make sure you are covering all cpp files, the make, file and the hpp files.
-
-note that I added couple of prompts from our discussion.
-
-
-
 
 
 

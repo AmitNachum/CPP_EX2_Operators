@@ -154,15 +154,15 @@ squaredMatrix squaredMatrix::operator*(double scalar){
 }
 
 
-squaredMatrix squaredMatrix::operator%(squaredMatrix &other){
+squaredMatrix squaredMatrix::operator%(const squaredMatrix &other){
     squaredMatrix result = squaredMatrix(this->n);
 
     for (size_t i = 0; i < n; i++)
     {
         for (size_t j = 0; j < n; j++)
         {
-            double value = this->getMatrix()[i][j];
-            double otherValue = other.getMatrix()[i][j];
+            double value = matrix[i][j];
+            double otherValue = other.matrix[i][j];
 
             result.matrix[i][j] = value * otherValue; 
         }
@@ -563,15 +563,7 @@ squaredMatrix &squaredMatrix::operator~(){
 squaredMatrix &squaredMatrix::operator +=(const squaredMatrix &other){
         if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
 
-
-        for (size_t i = 0; i < n; i++)
-        {
-            for (size_t j = 0; j < n; j++)
-            {
-                matrix[i][j] += other.matrix[i][j];
-            }
-            
-        }
+        *this = *this + other;
         
 return *this;
 }
@@ -579,15 +571,7 @@ return *this;
 squaredMatrix &squaredMatrix::operator -=(const squaredMatrix &other){
     if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
 
-
-    for (size_t i = 0; i < n; i++)
-    {
-        for (size_t j = 0; j < n; j++)
-        {
-            matrix[i][j] -= other.matrix[i][j];
-        }
-        
-    }
+   *this = *this - other;
     
 return *this;
 }
@@ -598,7 +582,6 @@ squaredMatrix &squaredMatrix::operator *=(const squaredMatrix &other){
 
   *this = (*this) * other;
   
-
   return *this;
 
 }
@@ -642,7 +625,6 @@ squaredMatrix &squaredMatrix::invertHelper(squaredMatrix &other){
 
 squaredMatrix &squaredMatrix::operator/=(squaredMatrix &other){
     if (!(other) == 0) throw "Error: Matrix isn't invertable\n";
-
     invertHelper(other);//inverting other
 
 
@@ -661,14 +643,7 @@ squaredMatrix &squaredMatrix::operator %=(const squaredMatrix &other){
     if (n != other.n) throw "Invalid operation between matrices with different dimensions\n";
 
 
-    for (size_t i = 0; i < n; i++)
-    {
-        for (size_t j = 0; j < n; j++)
-        {
-            matrix[i][j] *= other.matrix[i][j];
-        }
-        
-    }
+   *this = *this % other;
     
 return *this;
 
@@ -676,18 +651,11 @@ return *this;
 
 
 squaredMatrix &squaredMatrix::operator %=(size_t natural){
+    
     if(natural <= 0) throw "Modulu operation does not support the number you have provided\n";
+    *this = *this % natural;
 
 
-    for (size_t i = 0; i < n; i++)
-    {
-        for (size_t j = 0; j < n; j++)
-        {
-            if ((int)matrix[i][j] == matrix[i][j])
-            matrix[i][j] = (int)matrix[i][j] % natural;
-        }
-        
-    }
     
 return *this;
 }
